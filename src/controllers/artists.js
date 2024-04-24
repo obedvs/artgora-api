@@ -11,29 +11,24 @@ export class ArtistsController {
 
   static async getById (req, res) {
     const { id } = req.params
-    console.log(id)
     const artist = await ArtistModel.getById({ id })
-    console.log(artist)
     if (artist) return res.json(artist)
     res.status(404).json({ message: 'Artista/Grupo no encontrado.' })
   }
 
   static async create (req, res) {
-    const result = validateArtist(req.body)
-
-    if (!result.success) {
-      return res.status(400).json({ error: JSON.parse(result.error.message) })
-    }
+    // console.log(req)
+    
 
     // Validamos que nos envíen algún archivo
-    if (!req.files || Object.keys(req.files).length === 0) {
+    if (!req.files.perfil || Object.keys(req.files.perfil).length === 0) {
       return res.status(400).send({ message: 'No se subió una imagen.' });
     }
 
     // Extraemos el archivo de la request
     // el nombre "file" debe coincidir
     // con el valor del atributo name del input
-    const file = req.files.file;
+    const file = req.files.perfil;
 
     // Extraemos la extensión del archivo
     const extension = file.mimetype.split('/')[1];
@@ -53,7 +48,13 @@ export class ArtistsController {
     // Extraemos la url pública del archivo en cloudinary
     const { secure_url } = uploaded;
 
-    result.data.perfil = secure_url;
+    req.body.perfil = secure_url;
+
+    const result = validateArtist(req.body)
+
+    if (!result.success) {
+      return res.status(400).json({ error: JSON.parse(result.error.message) })
+    }
 
     const newArtist = await ArtistModel.create({ input: result.data })
 
@@ -73,34 +74,32 @@ export class ArtistsController {
   }
 
   static async update (req, res) {
+    const { id } = req.params
+
+    if (req.files?.perfil !== null && req.files?.perfil !== undefined) {
+      const file = req.files.perfil;
+
+      const extension = file.mimetype.split('/')[1];
+  
+      const validExtensions = ['png', 'jpg', 'jpeg'];
+      if (!validExtensions.includes(extension)) {
+          return res.status(400).send({ message: 'Extensión de imagen no válida.' });
+      }
+  
+      const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: 'artgora-images',
+      });
+  
+      const { secure_url } = uploaded;
+  
+      req.body.perfil = secure_url;
+    }
+
     const result = validatePartialArtist(req.body)
 
     if (!result.success) {
-      return res.status(400).json({ error: JSON.parse(result.error.message) })
+      return res.status(400).send({ message: JSON.parse(result.error.message) })
     }
-
-    const { id } = req.params
-
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).send({ message: 'No se subió una imagen.' });
-    }
-
-    const file = req.files.file;
-
-    const extension = file.mimetype.split('/')[1];
-
-    const validExtensions = ['png', 'jpg', 'jpeg'];
-    if (!validExtensions.includes(extension)) {
-        return res.status(400).send({ message: 'Extensión de imagen no válida.' });
-    }
-
-    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-      folder: 'artgora-images',
-    });
-
-    const { secure_url } = uploaded;
-
-    result.data.perfil = secure_url;
 
     const updatedArtist = await ArtistModel.update({ id, input: result.data })
 
