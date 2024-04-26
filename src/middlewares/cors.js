@@ -2,8 +2,8 @@ import cors from 'cors'
 
 const ACCEPTED_ORIGINS = [
   'http://localhost:5173',
-  'https://artgora-admin.vercel.app/',
-  'https://artgora.vercel.app/',
+  'https://artgora-admin.vercel.app',
+  'https://artgora.vercel.app',
 ]
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) => cors({
