@@ -14,7 +14,7 @@ async function connect () {
   try {
     await client.connect()
     const database = client.db('artgora-db')
-    return database.collection('artists')
+    return database.collection('images')
   } catch (error) {
     console.error('Error connecting to the database')
     console.error(error)
@@ -22,7 +22,7 @@ async function connect () {
   }
 }
 
-export class ArtistModel {
+export class ImageModel {
   static async getAll () {
     const db = await connect()
     return db.find({}).toArray()
@@ -32,6 +32,11 @@ export class ArtistModel {
     const db = await connect()
     const objectId = new ObjectId(id)
     return db.findOne({ _id: objectId })
+  }
+
+  static async getByExpositorId ({ id }) {
+    const db = await connect()
+    return db.find({ expositorId: id }).toArray()
   }
 
   static async create ({ input }) {
@@ -66,10 +71,10 @@ export class ArtistModel {
   // Crear un método para obtener 5 artistas, 4 aleatorios y 1 el ultimo creado
   static async getFive () {
     const db = await connect()
-    const artists = await db.find({}).toArray()
-    if (artists.length <= 5) return artists;
-    const randomArtists = artists.sort(() => Math.random() - Math.random()).slice(0, 4)
-    const lastArtist = artists[artists.length - 1]
-    return [...randomArtists, lastArtist]
+    const images = await db.find({}).toArray()
+    if (images.length <= 5) return images;
+    const randomImages = images.sort(() => Math.random() - Math.random()).slice(0, 4)
+    const lastImage = images[images.length - 1]
+    return [...randomImages, lastImage]
   }
 }
