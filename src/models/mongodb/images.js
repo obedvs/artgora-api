@@ -39,6 +39,11 @@ export class ImageModel {
     return db.find({ expositorId: id }).toArray()
   }
 
+  static async getByExpositorName ({ nombre }) {
+    const db = await connect()
+    return db.find({ expositorNombre: nombre }).toArray()
+  }
+
   static async create ({ input }) {
     const db = await connect()
 

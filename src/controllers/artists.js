@@ -111,4 +111,13 @@ export class ArtistsController {
     const artists = await ArtistModel.getFive()
     res.json(artists)
   }
+
+  static async search (req, res) {
+    const { nombre } = req.params
+    // Unencode URI component
+    const decodedNombre = decodeURIComponent(nombre)
+    const artist = await ArtistModel.search({ nombre: decodedNombre })
+    if (!artist) return res.status(404).json({ message: 'Artista/Grupo no encontrado.' })
+    res.json(artist)
+  }
 }

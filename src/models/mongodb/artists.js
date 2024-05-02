@@ -72,4 +72,12 @@ export class ArtistModel {
     const lastArtist = artists[artists.length - 1]
     return [...randomArtists, lastArtist]
   }
+
+  static async search ({ nombre }) {
+    const db = await connect()
+    // return only one
+    return db.findOne({ nombre: { $regex: new RegExp(nombre, 'i') } })
+    // return all
+    // return db.find({ nombre: { $regex: new RegExp(nombre, 'i') } }).toArray()
+  }
 }

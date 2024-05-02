@@ -22,6 +22,14 @@ export class ImagesController {
     res.status(404).send({ message: 'Imagen no encontrada.' })
   }
 
+  static async getByExpositorName (req, res) {
+    const { nombre } = req.params
+    const decodedNombre = decodeURIComponent(nombre);
+    const images = await ImageModel.getByExpositorName({ nombre: decodedNombre });
+    if (!images) return res.status(404).json({ message: 'Imagenes no encontradas.' });
+    return res.json(images);
+  }
+
   static async create (req, res) {
     // console.log(req)
 
