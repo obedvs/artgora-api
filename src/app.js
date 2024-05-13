@@ -3,9 +3,11 @@ import 'dotenv/config';
 import fileupload from 'express-fileupload';
 import {v2 as cloudinary} from 'cloudinary';
 import { corsMiddleware } from './middlewares/cors.js'
+
 import { artistsRouter } from './routes/artists.js';
-import { authRouter } from './routes/auth.js';
 import { imageRouter } from './routes/images.js';
+import { eventsRouter } from './routes/events.js';
+import { authRouter } from './routes/auth.js';
 
 export const app = express();
 
@@ -26,6 +28,7 @@ app.use(
 //ROUTES
 app.use('/artists', artistsRouter);
 app.use('/imagenes', imageRouter);
+app.use('/events', eventsRouter);
 app.use('/auth', authRouter);
 
 app.use((req, res) => {
