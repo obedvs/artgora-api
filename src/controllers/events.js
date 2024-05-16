@@ -104,8 +104,8 @@ export class EventsController {
   }
 
   // Método para obtener los últimos 5 eventos
-  static async getLastFive (req, res) {
-    const events = await EventModel.getLastFive()
+  static async getLastThree (req, res) {
+    const events = await EventModel.getLastThree()
     res.json(events)
   }
 }

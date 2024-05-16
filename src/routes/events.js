@@ -5,7 +5,7 @@ import { EventsController } from '../controllers/events.js'
 export const eventsRouter = Router()
 
 eventsRouter.get('/', EventsController.getAll)
-eventsRouter.get('/latest', EventsController.getLastFive);
+eventsRouter.get('/nextevents', EventsController.getLastThree);
 eventsRouter.post('/', EventsController.create);
 
 eventsRouter.get('/:id', EventsController.getById);
