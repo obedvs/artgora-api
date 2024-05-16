@@ -63,9 +63,9 @@ export class EventModel {
     return value
   }
 
-  // Crear un metodo para obtener los [ultimos 3 eventos con fecha de inicio mayor a la fecha actual]
+  // Crear un metodo para obtener los [ultimos 3 eventos ordenados por fecha de inicio]
   static async getLastThree () {
     const db = await connect()
-    return db.sort({ fechaInicio: 1 }).limit(3).toArray()
+    return db.find({}).sort({ fechaInicio: -1 }).limit(3).toArray()
   }
 }
