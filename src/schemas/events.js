@@ -8,8 +8,8 @@ const eventSchema = z.object({
     imagen: z.string({ required_error: 'Imagen is required.' }).url({ message: 'Imagen must be a valid url.' }),
     descripcion: z.string(),
     lugar: z.string({ required_error: 'Lugar is required.'}),
-    fechaInicio: z.date({ required_error: 'Fecha Inicio is required.' }),
-    fechaFin: z.date(),
+    fechaInicio: z.string({ required_error: 'Fecha Inicio is required.' }),
+    fechaFin: z.string(),
     horaInicio: z.string({ required_error: 'Hora Inicio is required.' }),
     horaFin: z.string(),
     editor: z.string({ invalid_type_error: 'Editor must be a string.', required_error: 'Editor is required.'})
