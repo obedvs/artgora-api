@@ -6,6 +6,7 @@ const ACCEPTED_ORIGINS = [
   'https://artgora-admin.vercel.app',
   'https://artgora.vercel.app',
   'https://artgora.art',
+  'https://www.artgora.art',
 ]
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) => cors({
